@@ -1,0 +1,52 @@
+CREATE DATABASE movie2;
+use movie2;
+CREATE TABLE Movies(
+    title VARCHAR(50),
+    director VARCHAR(50),
+    myear INT  NOT NULL,
+    rating FLOAT  NOT NULL,
+    PRIMARY KEY(title)
+    );
+CREATE TABLE Actors(
+    actor VARCHAR(50),
+    ayear INT NOT NULL,
+    PRIMARY KEY(actor)
+    );
+CREATE TABLE Acts(
+actor VARCHAR(50),
+    title VARCHAR(50),
+FOREIGN KEY (actor) REFERENCES  Actors(actor) ON DELETE CASCADE,
+    FOREIGN KEY (title) REFERENCES  Movies(title) ON DELETE CASCADE
+    );
+CREATE TABLE Directors(
+    director VARCHAR(50),
+    dyear INT NOT NULL,
+    PRIMARY KEY(director)
+    );
+INSERT INTO Movies(title,director,myear,rating)VALUES("Fargo","Coen",1996,8.2);
+INSERT INTO Movies(title,director,myear,rating)VALUES("Raising Arizona","Coen",1987,7.6);
+INSERT INTO Movies(title,director,myear,rating)VALUES("Spiderman","Raimi",2002,7.4);
+INSERT INTO Movies(title,director,myear,rating)VALUES("Wonder Boys","Hanson",2000,7.6);
+
+INSERT INTO Actors(actor,ayear)VALUES("Cage",1964);
+INSERT INTO Actors(actor,ayear)VALUES("Hanks",1956);
+INSERT INTO Actors(actor,ayear)VALUES("Maguire",1965);
+INSERT INTO Actors(actor,ayear)VALUES("McDormand",1957);
+
+INSERT INTO Acts(actor,title)VALUES("Cage","Raising Arizona");
+INSERT INTO Acts(actor,title)VALUES("Maguire","Spiderman");
+INSERT INTO Acts(actor,title)VALUES("Maguire","Wonder Boys");
+INSERT INTO Acts(actor,title)VALUES("McDormand","Fargo");
+INSERT INTO Acts(actor,title)VALUES("McDormand","Raising Arizona");
+INSERT INTO Acts(actor,title)VALUES("McDormand","Wonder Boys");
+
+INSERT INTO Directors(director,dyear)VALUES("Coen",1954);
+INSERT INTO Directors(director,dyear)VALUES("Hanson",1945);
+INSERT INTO Directors(director,dyear)VALUES("Raimi",1959);
+Drop table Directors;
+select * from Directors;
+select * from Movies where myear>1997;
+select * from Movies where director="Hanson" and myear>1997;
+select title,rating from Movies;
+SELECT  DISTINCT actor,director FROM directors NATURAL JOIN movies NATURAL JOIN acts NATURAL JOIN actors;
+select movies.title from movies,acts where director="coen" and actor="McDormand" and movies.title=acts.title;
