@@ -1,0 +1,11 @@
+create database mov;
+use mov;
+create table movies(title varchar(30) not null,director varchar(20) not null,myear int(5),rate float(3),primary key(title));
+insert into movies values("Fargo","Coen",1996,8.2);
+insert into movies values("Raising Arizona","Coen",1987,7.6);
+insert into movies values("Spiderman","Raimi",2002,7.4);
+insert into movies values("Wonder Boys","Hanson",2000,7.6);
+GRANT All ON movies TO 'hamna'@'localhost';
+REVOKE delete ON movies FROM 'hamna'@'localhost'; 
+REVOKE DELETE ON *.* FROM 'hamna'@'localhost';
+SHOW GRANTS FOR 'hamna'@'localhost';

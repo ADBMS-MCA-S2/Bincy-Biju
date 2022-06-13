@@ -1,0 +1,18 @@
+create database movie;
+use movie;
+create table movies(title varchar(30) not null,director varchar(20) not null,myear int(5),rate float(3),primary key(title));
+insert into movies values("Fargo","Coen",1996,8.2);
+insert into movies values("Raising Arizona","Coen",1987,7.6);
+insert into movies values("Spiderman","Raimi",2002,7.4);
+insert into movies values("Wonder Boys","Hanson",2000,7.6);
+set autocommit=0;
+insert into movies values("captain america","Han",20,7.8);
+savepoint b; 
+rollback;
+select *from movies;
+insert into movies values("iron man","Hannn",2020,7.88);
+savepoint c;
+insert into movies values("ant man","fin",20200,8099);
+savepoint d;
+rollback to c;
+commit;
