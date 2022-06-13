@@ -1,0 +1,321 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fswiss\fprq2\fcharset0 Calibri;}{\f1\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.17763}\viewkind4\uc1 
+\pard\nowidctlpar\sa200\sl276\slmult1\f0\fs22\lang9 > show databases\par
+admin      0.000GB\par
+candidate  0.000GB\par
+college    0.000GB\par
+config     0.000GB\par
+emp        0.000GB\par
+employees  0.000GB\par
+local      0.000GB\par
+> use school\par
+switched to db school\par
+> db.createCollection("students")\par
+\{ "ok" : 1 \}\par
+> db.school.insert(\{regno:"101",name:"Bincy",mark:[chem:"80",phy:"78",bio:"90"]\})\par
+uncaught exception: SyntaxError: missing ] after element list :\par
+@(shell):1:53\par
+> db.students.insert(\{regno:"101",name:"Bincy",mark:[chem:"80",phy:"78",bio:"90"]\})\par
+uncaught exception: SyntaxError: missing ] after element list :\par
+@(shell):1:55\par
+> db.students.insert(\{regno:"101",name:"Bincy",mark:[\{chem:"80"\},\{phy:"78"\},\{bio:"90"\}]\})\par
+WriteResult(\{ "nInserted" : 1 \})\par
+> db.students.insert(\{regno:"102",name:"sneha",mark:[\{chem:"90"\},\{phy:"88"\},\{bio:"80"\}]\})\par
+WriteResult(\{ "nInserted" : 1 \})\par
+> db.students.insert(\{regno:"103",name:"Diya",mark:[\{chem:"97"\},\{phy:"88"\},\{bio:"87"\}]\})\par
+WriteResult(\{ "nInserted" : 1 \})\par
+> db.students.find().pretty()\par
+\{\par
+        "_id" : ObjectId("62a06c6671761a55fd7551f9"),\par
+        "regno" : "101",\par
+        "name" : "Bincy",\par
+        "mark" : [\par
+                \{\par
+                        "chem" : "80"\par
+                \},\par
+                \{\par
+                        "phy" : "78"\par
+                \},\par
+                \{\par
+                        "bio" : "90"\par
+                \}\par
+        ]\par
+\}\par
+\{\par
+        "_id" : ObjectId("62a06c9c71761a55fd7551fa"),\par
+        "regno" : "102",\par
+        "name" : "sneha",\par
+        "mark" : [\par
+                \{\par
+                        "chem" : "90"\par
+                \},\par
+                \{\par
+                        "phy" : "88"\par
+                \},\par
+                \{\par
+                        "bio" : "80"\par
+                \}\par
+        ]\par
+\}\par
+\{\par
+        "_id" : ObjectId("62a06cc171761a55fd7551fb"),\par
+        "regno" : "103",\par
+        "name" : "Diya",\par
+        "mark" : [\par
+                \{\par
+                        "chem" : "97"\par
+                \},\par
+                \{\par
+                        "phy" : "88"\par
+                \},\par
+                \{\par
+                        "bio" : "87"\par
+                \}\par
+        ]\par
+\}\par
+> db.students.getIndices()\par
+[ \{ "v" : 2, "key" : \{ "_id" : 1 \}, "name" : "_id_" \} ]\par
+> db.students.createIndex(\{"101":1\})\par
+\{\par
+        "numIndexesBefore" : 1,\par
+        "numIndexesAfter" : 2,\par
+        "createdCollectionAutomatically" : false,\par
+        "ok" : 1\par
+\}\par
+> db.students.getIndices\par
+function(filter) \{\par
+    var res = this.runCommand("listIndexes", filter);\par
+\par
+    if (!res.ok) \{\par
+        if (res.code == ErrorCodes.NamespaceNotFound) \{\par
+            // For compatibility, return []\par
+            return [];\par
+        \}\par
+\par
+        throw _getErrorWithCode(res, "listIndexes failed: " + tojson(res));\par
+    \}\par
+\par
+    return new DBCommandCursor(this._db, res).toArray();\par
+\}\par
+> db.students.getIndices()\par
+[\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "_id" : 1\par
+                \},\par
+                "name" : "_id_"\par
+        \},\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "101" : 1\par
+                \},\par
+                "name" : "101_1"\par
+        \}\par
+]\par
+> db.students.dropIndex(\{"regno":1\})\par
+\{\par
+        "ok" : 0,\par
+        "errmsg" : "can't find index with key: \{ regno: 1.0 \}",\par
+        "code" : 27,\par
+        "codeName" : "IndexNotFound"\par
+\}\par
+> db.students.getIndices()\par
+[\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "_id" : 1\par
+                \},\par
+                "name" : "_id_"\par
+        \},\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "101" : 1\par
+                \},\par
+                "name" : "101_1"\par
+        \}\par
+]\par
+> db.students.createIndex(\{"regno":1,"name":1\})\par
+\{\par
+        "numIndexesBefore" : 2,\par
+        "numIndexesAfter" : 3,\par
+        "createdCollectionAutomatically" : false,\par
+        "ok" : 1\par
+\}\par
+> db.students.getIndices()\par
+[\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "_id" : 1\par
+                \},\par
+                "name" : "_id_"\par
+        \},\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "101" : 1\par
+                \},\par
+                "name" : "101_1"\par
+        \},\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "regno" : 1,\par
+                        "name" : 1\par
+                \},\par
+                "name" : "regno_1_name_1"\par
+        \}\par
+]\par
+> db.students.dropIndex(\{"101":1\})\par
+\{ "nIndexesWas" : 3, "ok" : 1 \}\par
+> db.students.getIndices()\par
+[\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "_id" : 1\par
+                \},\par
+                "name" : "_id_"\par
+        \},\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "regno" : 1,\par
+                        "name" : 1\par
+                \},\par
+                "name" : "regno_1_name_1"\par
+        \}\par
+]\par
+> db.students.find()\par
+\{ "_id" : ObjectId("62a06c6671761a55fd7551f9"), "regno" : "101", "name" : "Bincy", "mark" : [ \{ "chem" : "80" \}, \{ "phy" : "78" \}, \{ "bio" : "90" \} ] \}\par
+\{ "_id" : ObjectId("62a06c9c71761a55fd7551fa"), "regno" : "102", "name" : "sneha", "mark" : [ \{ "chem" : "90" \}, \{ "phy" : "88" \}, \{ "bio" : "80" \} ] \}\par
+\{ "_id" : ObjectId("62a06cc171761a55fd7551fb"), "regno" : "103", "name" : "Diya", "mark" : [ \{ "chem" : "97" \}, \{ "phy" : "88" \}, \{ "bio" : "87" \} ] \}\par
+> db.students.createIndex(\{"marks.phy":1\})\par
+\{\par
+        "numIndexesBefore" : 2,\par
+        "numIndexesAfter" : 3,\par
+        "createdCollectionAutomatically" : false,\par
+        "ok" : 1\par
+\}\par
+> db.students.getIndices()\par
+[\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "_id" : 1\par
+                \},\par
+                "name" : "_id_"\par
+        \},\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "regno" : 1,\par
+                        "name" : 1\par
+                \},\par
+                "name" : "regno_1_name_1"\par
+        \},\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "marks.phy" : 1\par
+                \},\par
+                "name" : "marks.phy_1"\par
+        \}\par
+]\par
+> db.students.dropIndex(\{"marks.phy":1\})\par
+\{ "nIndexesWas" : 3, "ok" : 1 \}\par
+> db.students.getIndices()\par
+[\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "_id" : 1\par
+                \},\par
+                "name" : "_id_"\par
+        \},\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "regno" : 1,\par
+                        "name" : 1\par
+                \},\par
+                "name" : "regno_1_name_1"\par
+        \}\par
+]\par
+> db.db.createCollection("comment")\par
+uncaught exception: TypeError: db.db.createCollection is not a function :\par
+@(shell):1:1\par
+> db.createCollection("comment")\par
+\{ "ok" : 1 \}\par
+> db.comment.insert(\{name:"sony","post":"hai there"\})\par
+WriteResult(\{ "nInserted" : 1 \})\par
+> db.comment.insert(\{name:"bincy","post":"hello there"\})\par
+WriteResult(\{ "nInserted" : 1 \})\par
+> db.comment.insert(\{name:"sneha","post":"thankyou"\})\par
+WriteResult(\{ "nInserted" : 1 \})\par
+> db.students.find()\par
+\{ "_id" : ObjectId("62a06c6671761a55fd7551f9"), "regno" : "101", "name" : "Bincy", "mark" : [ \{ "chem" : "80" \}, \{ "phy" : "78" \}, \{ "bio" : "90" \} ] \}\par
+\{ "_id" : ObjectId("62a06c9c71761a55fd7551fa"), "regno" : "102", "name" : "sneha", "mark" : [ \{ "chem" : "90" \}, \{ "phy" : "88" \}, \{ "bio" : "80" \} ] \}\par
+\{ "_id" : ObjectId("62a06cc171761a55fd7551fb"), "regno" : "103", "name" : "Diya", "mark" : [ \{ "chem" : "97" \}, \{ "phy" : "88" \}, \{ "bio" : "87" \} ] \}\par
+> db.comment.find()\par
+\{ "_id" : ObjectId("62a072a871761a55fd7551fc"), "name" : "sony", "post" : "hai there" \}\par
+\{ "_id" : ObjectId("62a072c671761a55fd7551fd"), "name" : "bincy", "post" : "hello there" \}\par
+\{ "_id" : ObjectId("62a072dc71761a55fd7551fe"), "name" : "sneha", "post" : "thankyou" \}\par
+> db.comment.createIndex(\{"post":"text"\})\par
+\{\par
+        "numIndexesBefore" : 1,\par
+        "numIndexesAfter" : 2,\par
+        "createdCollectionAutomatically" : false,\par
+        "ok" : 1\par
+\}\par
+> db.comment.find()\par
+\{ "_id" : ObjectId("62a072a871761a55fd7551fc"), "name" : "sony", "post" : "hai there" \}\par
+\{ "_id" : ObjectId("62a072c671761a55fd7551fd"), "name" : "bincy", "post" : "hello there" \}\par
+\{ "_id" : ObjectId("62a072dc71761a55fd7551fe"), "name" : "sneha", "post" : "thankyou" \}\par
+> db.students.getIndices()\par
+[\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "_id" : 1\par
+                \},\par
+                "name" : "_id_"\par
+        \},\par
+        \{\par
+                "v" : 2,\par
+                "key" : \{\par
+                        "regno" : 1,\par
+                        "name" : 1\par
+                \},\par
+                "name" : "regno_1_name_1"\par
+        \}\par
+]\par
+> db.comment.find(\{$text:\{ $search : "\\"hai there\\"" \}\})\par
+\{ "_id" : ObjectId("62a072a871761a55fd7551fc"), "name" : "sony", "post" : "hai there" \}\par
+> db.comment.find(\{$text:\{ $search : "\\" there\\"" \}\})\par
+> db.comment.find(\{$text:\{ $search : "\\" thank\\"" \}\})\par
+> db.comment.find(\{$text:\{ $search : "\\" thankyou\\"" \}\})\par
+> db.comment.find(\{$text:\{ $search : "\\" hello there\\"" \}\})\par
+>\par
+>\par
+>\par
+> db.comment.find(\{$text:\{ $search : "\\"hai there\\"" \}\})\par
+\{ "_id" : ObjectId("62a072a871761a55fd7551fc"), "name" : "sony", "post" : "hai there" \}\par
+> db.comment.find(\{$text:\{ $search : "\\"hello there\\"" \}\})\par
+\{ "_id" : ObjectId("62a072c671761a55fd7551fd"), "name" : "bincy", "post" : "hello there" \}\par
+> db.comment.find(\{$text:\{ $search : "\\"thankyou\\"" \}\})\par
+\{ "_id" : ObjectId("62a072dc71761a55fd7551fe"), "name" : "sneha", "post" : "thankyou" \}\par
+> db.comment.find(\{$text:\{ $search : "\\"thank\\"" \}\})\par
+>\par
+> db.comment.find(\{$text:\{ $search : "\\"thankyou\\"" \}\})\par
+\{ "_id" : ObjectId("62a072dc71761a55fd7551fe"), "name" : "sneha", "post" : "thankyou" \}\par
+>\par
+\par
+
+\pard\sa200\sl276\slmult1\f1\par
+}
+ 
