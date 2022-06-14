@@ -1,0 +1,33 @@
+Create database college_employee;
+drop database college_employee;
+use college_employee;
+drop table new_employee; 
+create table new_employee(emp_id int(10),emp_name varchar(20),emp_department varchar(20));
+insert into new_employee values(100,'jasmin','MCA');
+insert into new_employee values(101,'HHHHH','CS');
+drop table department_CS;
+create table department_MCA(dept_id int(10),Dept_name varchar(20),dept_employee varchar(20));
+select * from new_employee;
+select * from department_MCA;
+insert into new_employee values(105,'jjjjj','MCA');
+drop trigger emp_details;
+insert into new_employee values(111,'sssssh','MCA');
+insert into new_employee values(2222,'thushara','CS');
+create table department_CS(dept_id int(10),Dept_name varchar(20),dept_employee varchar(20));
+select * from department_CS;
+
+trigger code:
+CREATE DEFINER=`root`@`localhost` TRIGGER `college_employee`.`new_employee_AFTER_INSERT` AFTER INSERT ON `new_employee` FOR EACH ROW
+BEGIN
+if(new.emp_department='MCA') then
+insert into department_MCA set
+dept_id=new.emp_id,dept_name=new.emp_name,dept_employee="Asst.Prof filled";
+end if;
+if(new.emp_department='CS') then
+insert into department_CS set
+dept_id=new.emp_id,dept_name=new.emp_name,dept_employee="Asst.Prof filled";
+end if;
+END
+
+
+
